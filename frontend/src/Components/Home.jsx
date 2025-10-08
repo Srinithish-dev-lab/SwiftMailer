@@ -52,16 +52,10 @@ const Home = () => {
             const res = await axios.post(
                 `${import.meta.env.VITE_API_URL}/sendmail`,
                 formData,
-                {
-                    headers: { "Content-Type": "multipart/form-data" },
-                    onUploadProgress: (progressEvent) => {
-                        const total = progressEvent.total;
-                        const current = progressEvent.loaded;
-                        const percentCompleted = Math.round((current / total) * 100);
-                        toast.loading(`Sending emails... ${percentCompleted}%`, { id: toastId });
-                    },
-                }
+                { headers: { "Content-Type": "multipart/form-data" } }
             );
+
+            toast.loading(`Sending emails... `, { id: toastId });
         
             if (res.data === true) {
                 toast.success("Email Sent Successfully!", { id: toastId });
