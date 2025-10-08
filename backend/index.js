@@ -4,6 +4,9 @@ import express from "express";
 import multer from "multer";
 import cors from "cors";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const app = express();
 
 // use memory storage for buffer access
@@ -13,34 +16,9 @@ const upload = multer();
 app.use(cors());
 app.use(express.json());
 
-const connectWithRetry = async (retries = 5, delay = 5000) => {
-    try {
-        await mongoose.connect(
-            process.env.MONGO_URI,
-            {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-                serverSelectionTimeoutMS: 5000, // wait max 5s to find primary
-            }
-        );
-        console.log("✅ Connected to MongoDB!");
-    } catch (err) {
-        console.error(
-            `MongoDB connection failed. Retries left: ${retries}. Error:`,
-            err.message
-        );
-        if (retries > 0) {
-            console.log(`⏳ Retrying in ${delay / 1000}s...`);
-            setTimeout(() => connectWithRetry(retries - 1, delay), delay);
-        } else {
-            console.error("❌ Could not connect to MongoDB after multiple attempts.");
-        }
-    }
-};
 
-// Call the function
-connectWithRetry()
-
+const port = process.env.PORT || 3000;
+await mongoose.connect(process.env.MONGO_URI);
 
 
 const credential = mongoose.model("credential", {}, "swiftmailer")
@@ -103,6 +81,4 @@ app.post("/sendmail", upload.array("files"), async (req, res) => {
 });
 
 
-app.listen(process.env.PORT, () => {
-    console.log("Server Started...");
-});
+app.listen(port, () => console.log(`Server started on port ${port}...`));
