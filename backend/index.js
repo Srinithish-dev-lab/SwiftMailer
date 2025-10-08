@@ -16,7 +16,7 @@ app.use(express.json());
 const connectWithRetry = async (retries = 5, delay = 5000) => {
     try {
         await mongoose.connect(
-            "mongodb+srv://new_user:mongo123@cluster0.3yspfwl.mongodb.net/passkey",
+            process.env.MONGO_URI,
             {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
@@ -103,6 +103,6 @@ app.post("/sendmail", upload.array("files"), async (req, res) => {
 });
 
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
     console.log("Server Started...");
 });
