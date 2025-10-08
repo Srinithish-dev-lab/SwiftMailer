@@ -46,30 +46,34 @@ const Home = () => {
         files.forEach((file) => formData.append("files", file));
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/sendmail`, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-
+            const toastId = toast.loading("Sending emails...");
+        
+            const res = await axios.post(
+                `${import.meta.env.VITE_API_URL}/sendmail`,
+                formData,
+                { headers: { "Content-Type": "multipart/form-data" } }
+            );
+        
             if (res.data === true) {
-                toast.success("Email Sent Successfully!");
+                toast.success("Email Sent Successfully!", { id: toastId });
                 setSubject("");
                 setMessage("");
                 setEmails([]);
                 setFiles([]);
                 setErrors({});
-
+        
                 if (fileInputRef.current) fileInputRef.current.value = "";
                 if (emailFileInputRef.current) emailFileInputRef.current.value = "";
-            } else {
-                toast.error("Failed to send emails.");
+            }else{
+                toast.error("Failed to send emails!", { id: toastId });
             }
-        } catch (err) {
-            console.error(err);
-            toast.error("Something went wrong while sending emails.");
-        } finally {
-            setStatus(false);
+        } catch (error) {
+            toast.error("An error occurred while sending emails.", { id: toastId });
         }
-    };
+        finally {
+                setStatus(false);
+            }
+   };
 
     return (
         <div className="flex justify-center bg-gray-200/50 py-10 min-h-screen">
