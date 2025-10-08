@@ -50,7 +50,7 @@ const Home = () => {
             const toastId = toast.loading("Preparing to send emails...");
         
             const res = await axios.post(
-                `${import.meta.env.VITE_API_URL}/sendmail`,
+                `${import.meta.env.VITE_API_URI}/sendmail`,
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
