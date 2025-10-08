@@ -4,6 +4,14 @@ import express from "express";
 import multer from "multer";
 import cors from "cors";
 
+import dotenv from "dotenv";
+dotenv.config();
+
+const port = process.env.PORT || 3000;
+await mongoose.connect(process.env.MONGO_URI);
+
+
+
 const app = express();
 
 // use memory storage for buffer access
@@ -15,14 +23,7 @@ app.use(express.json());
 
 const connectWithRetry = async (retries = 5, delay = 5000) => {
     try {
-        await mongoose.connect(
-            process.env.MONGO_URI,
-            {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-                serverSelectionTimeoutMS: 5000, // wait max 5s to find primary
-            }
-        );
+        await mongoose.connect(process.env.MONGO_URI);
         console.log("✅ Connected to MongoDB!");
     } catch (err) {
         console.error(
@@ -103,6 +104,4 @@ app.post("/sendmail", upload.array("files"), async (req, res) => {
 });
 
 
-app.listen(process.env.PORT, () => {
-    console.log("Server Started...");
-});
+app.listen(port, () => console.log(`Server started on port ${port}...`));
