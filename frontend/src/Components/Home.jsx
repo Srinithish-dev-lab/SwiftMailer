@@ -16,7 +16,6 @@ const Home = () => {
     const emailFileInputRef = useRef(null);
     const fileInputRef = useRef(null);
 
-
     const validateForm = () => {
         const newErrors = {};
 
