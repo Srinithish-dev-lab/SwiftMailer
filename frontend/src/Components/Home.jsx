@@ -46,12 +46,21 @@ const Home = () => {
         files.forEach((file) => formData.append("files", file));
 
         try {
-            const toastId = toast.loading("Sending emails...");
+    // Create a loading toast
+            const toastId = toast.loading("Preparing to send emails...");
         
             const res = await axios.post(
                 `${import.meta.env.VITE_API_URL}/sendmail`,
                 formData,
-                { headers: { "Content-Type": "multipart/form-data" } }
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                    onUploadProgress: (progressEvent) => {
+                        const total = progressEvent.total;
+                        const current = progressEvent.loaded;
+                        const percentCompleted = Math.round((current / total) * 100);
+                        toast.loading(`Sending emails... ${percentCompleted}%`, { id: toastId });
+                    },
+                }
             );
         
             if (res.data === true) {
@@ -64,7 +73,7 @@ const Home = () => {
         
                 if (fileInputRef.current) fileInputRef.current.value = "";
                 if (emailFileInputRef.current) emailFileInputRef.current.value = "";
-            }else{
+            } else {
                 toast.error("Failed to send emails!", { id: toastId });
             }
         } catch (error) {
