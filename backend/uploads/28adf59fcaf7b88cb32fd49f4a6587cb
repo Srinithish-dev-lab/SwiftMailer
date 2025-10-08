@@ -1,0 +1,24 @@
+Nostra E-Commerce Website: Self-based
+Tech Skills – HTML, CSS, JavaScript, GitHub
+
+Developed a dynamic E-commerce website with responsive design using HTML, CSS, and JavaScript.
+
+Implemented real-time product filtering by category, color, and arrivals with DOM manipulation.
+
+Designed an adaptive hamburger menu and sidebar filters for seamless mobile usability.
+
+Built modular JavaScript functions to manage product rendering and filtering for maintainability.
+
+
+
+
+FilmoraX – Movie Explorer Web App (Self-based)
+Tech Skills – React.js, JavaScript (ES6), TailwindCSS, TMDB API, Context API, GitHub
+
+Built a movie search and browsing platform using TMDB API with real-time results.
+
+Implemented watchlist functionality with Context API for state management and persistence.
+
+Added search and genre-based filtering to improve user experience.
+
+Designed a responsive UI with pagination, genre selection, and dynamic movie cards using TailwindCSS.
