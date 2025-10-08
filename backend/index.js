@@ -10,8 +10,6 @@ dotenv.config();
 const port = process.env.PORT || 3000;
 await mongoose.connect(process.env.MONGO_URI);
 
-
-
 const app = express();
 
 // use memory storage for buffer access
