@@ -44,6 +44,8 @@ const Home = () => {
 
     const toastId = toast.loading("Preparing to send emails...");
 
+    console.log("API URI 👉", import.meta.env.VITE_API_URI);
+
     try {
         const res = await axios.post(
             `${import.meta.env.VITE_API_URI}/sendmail`,
