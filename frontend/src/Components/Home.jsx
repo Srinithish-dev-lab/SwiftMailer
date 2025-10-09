@@ -19,8 +19,8 @@ const Home = () => {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!subject.trim()) newErrors.subject = "Sub.";
-        if (!message.trim()) newErrors.message = "Message con.";
+        if (!subject.trim()) newErrors.subject = "Subject is required.";
+        if (!message.trim()) newErrors.message = "Message content is required.";
         if (emails.length === 0) newErrors.emails = "Please upload or enter at least one email.";
 
         setErrors(newErrors);
