@@ -28,55 +28,50 @@ const Home = () => {
     };
 
 
-    const Send = async () => {
-        if (!validateForm()) {
-            toast.error("Please fill all required fields correctly.");
-            return;
+   const Send = async () => {
+    if (!validateForm()) {
+        toast.error("Please fill all required fields correctly.");
+        return;
+    }
+
+    setStatus(true);
+    const formData = new FormData();
+    formData.append("subject", subject);
+    formData.append("message", message);
+
+    emails.forEach((email) => formData.append("emails", email));
+    files.forEach((file) => formData.append("files", file));
+
+    const toastId = toast.loading("Preparing to send emails...");
+
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_API_URI}/sendmail`,
+            formData,
+            { headers: { "Content-Type": "multipart/form-data" } }
+        );
+
+        toast.update(toastId, { render: "Sending emails...", isLoading: true });
+
+        if (res.data === true) {
+            toast.update(toastId, { render: "Emails sent successfully!", type: "success", isLoading: false });
+            setSubject("");
+            setMessage("");
+            setEmails([]);
+            setFiles([]);
+            setErrors({});
+            if (fileInputRef.current) fileInputRef.current.value = "";
+            if (emailFileInputRef.current) emailFileInputRef.current.value = "";
+        } else {
+            toast.update(toastId, { render: "Failed to send emails!", type: "error", isLoading: false });
         }
-
-        setStatus(true);
-        const formData = new FormData();
-        formData.append("subject", subject);
-        formData.append("message", message);
-
-        // emails array
-        emails.forEach((email) => formData.append("emails", email));
-
-        // files array
-        files.forEach((file) => formData.append("files", file));
-
-        try {
-    // Create a loading toast
-            const toastId = toast.loading("Preparing to send emails...");
-        
-            const res = await axios.post(
-                `${import.meta.env.VITE_API_URI}/sendmail`,
-                formData,
-                { headers: { "Content-Type": "multipart/form-data" } }
-            );
-
-            toast.loading(`Sending emails... `, { id: toastId });
-        
-            if (res.data === true) {
-                toast.success("Email Sent Successfully!", { id: toastId });
-                setSubject("");
-                setMessage("");
-                setEmails([]);
-                setFiles([]);
-                setErrors({});
-        
-                if (fileInputRef.current) fileInputRef.current.value = "";
-                if (emailFileInputRef.current) emailFileInputRef.current.value = "";
-            } else {
-                toast.error("Failed to send emails!", { id: toastId });
-            }
-        } catch (error) {
-            toast.error("An error occurred while sending emails.", { id: toastId });
-        }
-        finally {
-                setStatus(false);
-            }
-   };
+    } catch (error) {
+        console.error("Error sending emails:", error);
+        toast.update(toastId, { render: "An error occurred while sending emails.", type: "error", isLoading: false });
+    } finally {
+        setStatus(false);
+    }
+};
 
     return (
         <div className="flex justify-center bg-gray-200/50 py-10 min-h-screen">
